@@ -1,8 +1,3 @@
-<script setup lang="ts">
-const auth = useAuthStore();
-auth.init();
-</script>
-
 <template>
   <a-layout style="min-height: 100vh">
     <Sidebar />
@@ -10,13 +5,17 @@ auth.init();
       <Navbar />
       <a-layout-content style="margin: 0 16px">
         <a-breadcrumb style="margin: 16px 0">
-          <a-breadcrumb-item>Task</a-breadcrumb-item>
-          <a-breadcrumb-item>Lists</a-breadcrumb-item>
+          <a-breadcrumb-item
+            v-for="(item, index) in breadcrumbItems"
+            :key="index"
+          >
+            {{ item }}
+          </a-breadcrumb-item>
         </a-breadcrumb>
         <div
           :style="{ padding: '24px', background: '#fff', minHeight: '360px' }"
         >
-          <slot></slot>
+          <slot />
         </div>
       </a-layout-content>
       <a-layout-footer style="text-align: center">
@@ -25,24 +24,26 @@ auth.init();
     </a-layout>
   </a-layout>
 </template>
+
+<script lang="ts" setup>
+// Initialize auth store
+const auth = useAuthStore();
+auth.init();
+
+// Dynamic breadcrumbs based on route
+const route = useRoute();
+const breadcrumbItems = computed(() => {
+  const path = route.path.split("/").filter((segment) => segment);
+  return path.map(
+    (segment) => segment.charAt(0).toUpperCase() + segment.slice(1)
+  );
+});
+</script>
+
 <style scoped>
-#components-layout-demo-side .logo {
+.logo {
   height: 32px;
   margin: 16px;
   background: rgba(255, 255, 255, 0.3);
-}
-
-.site-layout .site-layout-background {
-  background: #fff;
-}
-[data-theme="dark"] .site-layout .site-layout-background {
-  background: #141414;
-}
-</style>
-<style>
-body {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
 }
 </style>
