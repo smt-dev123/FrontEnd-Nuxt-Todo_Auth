@@ -67,7 +67,6 @@ const formState = reactive<User>({
 
 const authStore = useAuthStore();
 onMounted(async () => {
-  // await authStore.init();
   await authStore.fetchUser();
 });
 watchEffect(() => {

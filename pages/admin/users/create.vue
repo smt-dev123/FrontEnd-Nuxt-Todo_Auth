@@ -72,7 +72,7 @@ const labelCol = { style: { width: "110px" } };
     </a-form-item>
 
     <a-form-item :wrapper-col="{ offset: 18, span: 16 }">
-      <NuxtLink to="/">
+      <NuxtLink to="/admin/users">
         <a-button type="primary" danger class="mr-2">Cancel</a-button>
       </NuxtLink>
       <a-button type="primary" html-type="submit" @click.prevent="handleSubmit"

@@ -1,76 +1,68 @@
 import { defineStore } from "pinia";
-import { jwtDecode } from "jwt-decode";
 
-interface JwtPayload {
+interface User {
   userId: number;
   role: "admin" | "user";
-  exp: number;
-  iat: number;
+  email?: string;
+  username?: string;
 }
 
-export const useAuthStore = defineStore("authStore", () => {
-  const token = useCookie<string | null>("token", { default: () => null });
-  const user = ref<JwtPayload | null>(null);
+export const useAuthStore = defineStore("authStore", {
+  state: () => ({
+    token: useCookie<string | null>("token", { default: () => null }),
+    user: null as User | null,
+  }),
 
-  const isAuthenticated = computed(() => !!token.value);
-  const isAdmin = computed(() => user.value?.role === "admin");
-  const isUser = computed(() => user.value?.role === "user");
+  getters: {
+    isAuthenticated: (state) => !!state.token,
+    isAdmin: (state) => state.user?.role === "admin",
+    isUser: (state) => state.user?.role === "user",
+  },
 
-  const init = () => {
-    if (token.value) {
-      try {
-        const decoded = jwtDecode<JwtPayload>(token.value);
-        user.value = decoded;
-      } catch (e) {
-        console.error("Invalid token");
-        logout();
+  actions: {
+    async init() {
+      if (this.token && !this.user) {
+        await this.fetchUser();
       }
-    }
-  };
+    },
 
-  const login = async (credentials: { email: string; password: string }) => {
-    const { data, error } = await useFetch("http://localhost:4000/auth/login", {
-      method: "POST",
-      body: credentials,
-    });
+    async login(credentials: { email: string; password: string }) {
+      try {
+        const res = await $fetch("http://localhost:4000/auth/login", {
+          method: "POST",
+          body: credentials,
+        });
 
-    if (error.value)
-      throw createError({ statusCode: 401, statusMessage: "Login failed" });
+        this.token = res.access_token;
+        useCookie("token").value = res.access_token;
 
-    token.value = data.value.access_token;
-    const decoded = jwtDecode<JwtPayload>(data.value.access_token);
-    user.value = decoded;
-  };
+        await this.fetchUser();
+      } catch (error) {
+        throw createError({ statusCode: 401, statusMessage: "Login failed" });
+      }
+    },
 
-  const logout = () => {
-    token.value = null;
-    user.value = null;
-  };
+    async fetchUser() {
+      if (!this.token) return;
+      try {
+        const user = await $fetch("http://localhost:4000/auth/me", {
+          headers: {
+            Authorization: `Bearer ${this.token}`,
+          },
+        });
+        this.user = user;
+      } catch (error) {
+        this.user = null;
+        this.token = null;
+        useCookie("token").value = null;
+        console.error("Unable to fetch user:", error);
+      }
+    },
 
-  const me = async () => {
-    const { data, error } = await useFetch("http://localhost:4000/auth/me", {
-      headers: {
-        Authorization: token.value ? `Bearer ${token.value}` : "",
-      },
-    });
-
-    if (error.value) {
-      console.log("Error fetching user info");
-      return null;
-    }
-    user.value = data.value; // <-- update user state
-    return data.value;
-  };
-
-  return {
-    token,
-    user,
-    isAuthenticated,
-    isAdmin,
-    isUser,
-    login,
-    logout,
-    init,
-    me,
-  };
+    logout() {
+      this.token = null;
+      this.user = null;
+      useCookie("token").value = null;
+    },
+  },
 });

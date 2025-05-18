@@ -6,8 +6,8 @@ definePageMeta({
 });
 // Fetch Data
 const userStore = useUsersStore();
-onMounted(() => {
-  userStore.getUser();
+onMounted(async () => {
+  await userStore.getUser();
 });
 
 const handleDelete = async (id: number) => {

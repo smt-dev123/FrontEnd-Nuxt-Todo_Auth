@@ -1,3 +1,8 @@
+<script setup lang="ts">
+const auth = useAuthStore();
+auth.init();
+</script>
+
 <template>
   <a-layout style="min-height: 100vh">
     <Sidebar />
