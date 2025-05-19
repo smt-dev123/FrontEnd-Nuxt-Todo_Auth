@@ -4,7 +4,7 @@ definePageMeta({
   middleware: "auth",
   layout: "auth",
 });
-useHead({
+useSeoMeta({
   title: "Users",
 });
 // Fetch Data

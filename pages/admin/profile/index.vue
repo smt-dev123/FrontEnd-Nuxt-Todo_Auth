@@ -81,4 +81,7 @@ const onSubmit = () => {
   console.log("submit!", toRaw(formState));
 };
 const labelCol = { style: { width: "130px" } };
+useSeoMeta({
+  title: "Profile",
+});
 </script>

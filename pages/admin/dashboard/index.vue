@@ -7,4 +7,7 @@ definePageMeta({
   middleware: "auth",
   layout: "auth",
 });
+useSeoMeta({
+  title: "Dashboard",
+});
 </script>

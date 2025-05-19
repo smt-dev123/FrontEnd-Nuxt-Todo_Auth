@@ -24,6 +24,9 @@ watchEffect(() => {
     formState.status = tasksStroe.task?.status;
     formState.image = tasksStroe.task?.image;
   }
+  useSeoMeta({
+    title: `Edit task: ${tasksStroe.task?.title}`,
+  });
 });
 
 const inputImage = (event: Event) => {

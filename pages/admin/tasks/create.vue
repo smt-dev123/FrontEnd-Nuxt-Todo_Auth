@@ -53,6 +53,9 @@ const resetForm = () => {
   formState.status = "pending";
 };
 const labelCol = { style: { width: "110px" } };
+useSeoMeta({
+  title: "Create Task",
+});
 </script>
 
 <template>

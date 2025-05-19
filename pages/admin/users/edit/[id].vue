@@ -26,7 +26,7 @@ watchEffect(() => {
     formState.email = userStore.user.email;
     formState.role = userStore.user.role;
   }
-  useHead({
+  useSeoMeta({
     title: `Edit User: ${userStore.user?.username}`,
   });
 });

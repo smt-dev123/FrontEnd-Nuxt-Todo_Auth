@@ -59,6 +59,9 @@ const columns = [
 ];
 
 const data = computed(() => tasksStore.tasks ?? []);
+useSeoMeta({
+  title: "Tasks",
+});
 </script>
 
 <template>

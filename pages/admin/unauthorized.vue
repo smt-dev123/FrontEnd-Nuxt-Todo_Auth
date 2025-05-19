@@ -2,6 +2,9 @@
 definePageMeta({
   middleware: "auth",
 });
+useSeoMeta({
+  title: "Unauthorized",
+});
 </script>
 
 <template>

@@ -6,7 +6,7 @@ definePageMeta({
   layout: "auth",
   role: "admin",
 });
-useHead({
+useSeoMeta({
   title: "Create User",
 });
 const formState = reactive<User>({

@@ -59,4 +59,7 @@ const handleLogin = async () => {
   }
 };
 const labelCol = { style: { width: "100px" } };
+useSeoMeta({
+  title: "Login",
+});
 </script>
