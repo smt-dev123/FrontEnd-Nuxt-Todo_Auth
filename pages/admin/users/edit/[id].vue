@@ -1,7 +1,21 @@
 <script lang="ts" setup>
 import type { User } from "~/types/Types";
+definePageMeta({
+  middleware: "auth",
+  layout: "auth",
+  role: "admin",
+});
+
 const userStore = useUsersStore();
 const id = useRoute().params.id as string;
+
+const formState = reactive<User>({
+  username: "",
+  email: "",
+  password: "",
+  role: "User",
+});
+
 onMounted(async () => {
   await userStore.getOneUser(id);
 });
@@ -12,18 +26,9 @@ watchEffect(() => {
     formState.email = userStore.user.email;
     formState.role = userStore.user.role;
   }
-});
-
-definePageMeta({
-  middleware: "auth",
-  layout: "auth",
-  role: "admin",
-});
-const formState = reactive<User>({
-  username: "",
-  email: "",
-  password: "",
-  role: "User",
+  useHead({
+    title: `Edit User: ${userStore.user?.username}`,
+  });
 });
 
 const handleSubmit = async () => {
@@ -50,7 +55,7 @@ const labelCol = { style: { width: "110px" } };
       name="username"
       :rules="[{ required: true, message: 'Please input your username!' }]"
     >
-      <a-input v-model:value="formState.username" />
+      <a-input v-model:value="formState.username" autocomplete="username" />
     </a-form-item>
 
     <a-form-item
@@ -58,10 +63,7 @@ const labelCol = { style: { width: "110px" } };
       name="email"
       :rules="[{ required: true, message: 'Please input your email!' }]"
     >
-      <a-input
-        v-model:value="formState.email"
-        autocomplete="current-username"
-      />
+      <a-input v-model:value="formState.email" autocomplete="email" />
     </a-form-item>
 
     <a-form-item

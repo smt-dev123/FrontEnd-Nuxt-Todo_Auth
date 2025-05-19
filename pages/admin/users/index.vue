@@ -4,6 +4,9 @@ definePageMeta({
   middleware: "auth",
   layout: "auth",
 });
+useHead({
+  title: "Users",
+});
 // Fetch Data
 const userStore = useUsersStore();
 onMounted(async () => {
@@ -68,7 +71,7 @@ const data = computed(() => userStore.users ?? []);
       <template v-if="column.key === 'action'">
         <div class="flex gap-2">
           <NuxtLink
-            :to="`users/edit/${record.id}`"
+            :to="`/admin/users/edit/${record.id}`"
             class="text-green-500 hover:text-green-600"
             >Edit</NuxtLink
           >

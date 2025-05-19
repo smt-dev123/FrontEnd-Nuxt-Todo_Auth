@@ -6,6 +6,9 @@ definePageMeta({
   layout: "auth",
   role: "admin",
 });
+useHead({
+  title: "Create User",
+});
 const formState = reactive<User>({
   username: "",
   email: "",
@@ -38,7 +41,7 @@ const labelCol = { style: { width: "110px" } };
       name="username"
       :rules="[{ required: true, message: 'Please input your username!' }]"
     >
-      <a-input v-model:value="formState.username" />
+      <a-input v-model:value="formState.username" autocomplete="username" />
     </a-form-item>
 
     <a-form-item
@@ -46,7 +49,7 @@ const labelCol = { style: { width: "110px" } };
       name="email"
       :rules="[{ required: true, message: 'Please input your email!' }]"
     >
-      <a-input v-model:value="formState.email" />
+      <a-input v-model:value="formState.email" autocomplete="email" />
     </a-form-item>
 
     <a-form-item
