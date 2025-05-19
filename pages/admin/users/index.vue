@@ -14,42 +14,47 @@ const handleDelete = async (id: number) => {
   await userStore.deleteUser(id);
 };
 
-const columns = [
-  {
-    title: "ID",
-    dataIndex: "id",
-    key: "id",
-    width: 8,
-  },
-  {
-    title: "User Name",
-    dataIndex: "username",
-    key: "username",
-    width: 35,
-  },
-  {
-    title: "Email",
-    dataIndex: "email",
-    key: "email",
-    ellipsis: true,
-    width: 35,
-  },
-  {
-    title: "Role",
-    dataIndex: "role",
-    key: "role",
-    ellipsis: true,
-    width: 20,
-  },
-];
-if (auth.isAdmin) {
-  columns.push({
-    title: "Action",
-    dataIndex: "action",
-    key: "action",
-    width: 15,
-  });
-}
+const columns = computed(() => {
+  const base = [
+    {
+      title: "ID",
+      dataIndex: "id",
+      key: "id",
+      width: 8,
+    },
+    {
+      title: "User Name",
+      dataIndex: "username",
+      key: "username",
+      width: 35,
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+      ellipsis: true,
+      width: 35,
+    },
+    {
+      title: "Role",
+      dataIndex: "role",
+      key: "role",
+      ellipsis: true,
+      width: 20,
+    },
+  ];
+
+  if (auth.isAdmin) {
+    base.push({
+      title: "Action",
+      dataIndex: "action",
+      key: "action",
+      width: 15,
+    });
+  }
+
+  return base;
+});
 
 const data = computed(() => userStore.users ?? []);
 </script>

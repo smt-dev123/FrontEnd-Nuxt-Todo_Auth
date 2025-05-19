@@ -2,7 +2,7 @@
   <main class="w-full h-screen">
     <div class="flex flex-col justify-center items-center h-screen">
       <h1 class="text-2xl font-bold mb-4">Login</h1>
-      <a-form :model="formState" name="basic">
+      <a-form :model="formState" name="basic" :label-col="labelCol">
         <a-form-item
           label="Email"
           name="email"
@@ -25,7 +25,9 @@
         <span class="text-red-500">{{ error }}</span>
 
         <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
-          <a-button type="primary" @click="handleLogin">Login</a-button>
+          <a-button type="primary" html-type="submit" @click="handleLogin"
+            >Login</a-button
+          >
         </a-form-item>
       </a-form>
     </div>
@@ -33,8 +35,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useAuthStore } from "~/stores/auth";
-
 interface FormState {
   email: string;
   password: string;
@@ -52,9 +52,11 @@ const error = ref("");
 const handleLogin = async () => {
   try {
     await auth.login({ email: formState.email, password: formState.password });
+    message.success("Login successfully");
     navigateTo("/admin/dashboard");
   } catch (e) {
     error.value = "Login failed. Please check your credentials.";
   }
 };
+const labelCol = { style: { width: "100px" } };
 </script>
